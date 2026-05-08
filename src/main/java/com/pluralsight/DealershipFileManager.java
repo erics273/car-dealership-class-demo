@@ -72,7 +72,13 @@ public class DealershipFileManager {
     }
 
     //stay empty for now but we will revisit later
-    public void saveDealership(){
+    public void saveDealership(Dealership dealership){
+
+        //deal with the dealership info for the first line
+
+        //deal with each vehicle
+
+
 
     }
 
