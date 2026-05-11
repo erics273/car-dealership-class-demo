@@ -1,7 +1,10 @@
 package com.pluralsight;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
 
 public class DealershipFileManager {
 
@@ -30,11 +33,13 @@ public class DealershipFileManager {
                 String address = dealershipParts[1];
                 String phone = dealershipParts[2];
 
-                //create the dealership
+                //create an instance of the dealership based on the dealership
+                //info in the first line of the CSV
                 theDealership = new Dealership(name, address, phone);
 
             }
 
+            //now lets handle the rest of the CSV which reprents the inventory
             String vehicleInfo;
             while((vehicleInfo = inventoryReader.readLine()) != null){
 
@@ -72,14 +77,27 @@ public class DealershipFileManager {
     }
 
     //stay empty for now but we will revisit later
-    public void saveDealership(Dealership dealership){
+    // Writes the dealership and its vehicles to the CSV file
+    public void saveDealership(Dealership dealership) {
+        try {
+            // Open the file for writing (overwrites existing file)
+            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(FILE_PATH));
 
-        //deal with the dealership info for the first line
+            // Write dealership header info (first line)
+            fileWriter.write(dealership.getName() + "|" + dealership.getAddress() + "|" + dealership.getPhone());
+            fileWriter.newLine();
 
-        //deal with each vehicle
+            // Write one line for each vehicle
+            ArrayList<Vehicle> inventory = dealership.getAllVehicles();
+            for (Vehicle vehicle : inventory) {
+                fileWriter.write(vehicle.toString());
+                fileWriter.newLine();
+            }
 
-
-
+            fileWriter.close();
+        } catch (Exception e) {
+            System.out.println("Error writing dealership file: " + e.getMessage());
+        }
     }
 
 }
